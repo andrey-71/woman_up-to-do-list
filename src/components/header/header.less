@@ -1,0 +1,29 @@
+@import '../../less/mixins';
+
+.header {
+  max-width: 1280px;
+  padding: 80px 60px 60px;
+  box-sizing: border-box;
+  
+  @media screen and (max-width: 1024px) {
+    padding: 60px 40px 40px;
+  }
+  
+  @media screen and (max-width: 480px) {
+    padding: 40px 20px 40px;
+  }
+}
+
+.page__header {
+  margin: 0 auto;
+}
+
+.header__title {
+  margin: 0;
+  .text-style('AGAvalancheC', 40px, 700, 1.25, #c9b292);
+  text-align: center;
+  
+  @media screen and (max-width: 480px) {
+    font-size: 35px;
+  }
+}

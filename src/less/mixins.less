@@ -1,0 +1,35 @@
+// Стили для текста
+.text-style(@font, @size, @weight, @line-height, @color) {
+  font-family: @font, 'Arial', 'Helvetica', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  font-size: @size;
+  font-weight: @weight;
+  line-height: @line-height;
+  color: @color;
+}
+
+// Стили для различных расширений экрана
+.desktop-screen(@rules) {
+  @media screen and (max-width: 1280px) { @rules(); }
+}
+
+.ipad-tablet-screen(@rules) {
+  @media screen and (max-width: 1024px) { @rules(); }
+}
+
+.ipad-screen(@rules) {
+  @media screen and (max-width: 768px) { @rules(); }
+}
+
+.mobile-tablet-screen(@rules) {
+  @media screen and (max-width: 480px) { @rules(); }
+}
+
+.mobile-screen(@rules) {
+  @media screen and (max-width: 320px) { @rules(); }
+}

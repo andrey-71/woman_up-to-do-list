@@ -1,0 +1,52 @@
+@import '../../less/mixins';
+
+.list-header {
+  min-height: 20px;
+  padding-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(112, 112, 112, .5);
+}
+
+.list-header__info {
+  display: flex;
+  width: calc(100% - 120px);
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.list-header__data-element {
+  margin: 0;
+  width: 100%;
+  margin-right: 20px;
+  .text-style('AGAvalancheC', 20px, 700, 1.25, #fff);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+
+  .desktop-screen({
+    font-size: 16px;
+  });
+
+  &_type_index {
+    width: 4%;
+  }
+
+  &_type_title {
+    width: 22%;
+  }
+
+  &_type_description {
+    width: 28%;
+  }
+
+  &_type_date-complete {
+    width: 18%;
+  }
+
+  &_type_files {
+    width: 18%;
+  }
+}

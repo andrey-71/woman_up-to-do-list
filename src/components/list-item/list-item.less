@@ -1,0 +1,99 @@
+@import '../../less/mixins';
+
+.list-item {
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(112, 112, 112, .5);
+}
+
+.list-item__info {
+  display: flex;
+  width: calc(100% - 120px);
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  cursor: pointer;
+  transition: .3s;
+
+  &:hover {
+    opacity: .7;
+  }
+}
+
+.list-item__data-element {
+  margin: 0;
+  width: 100%;
+  margin-right: 20px;
+  .text-style('AGAvalancheC', 18px, 400, 1.25, #fff);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+
+  .desktop-screen({
+    font-size: 16px;
+  });
+
+  &_type_index {
+    width: 4%;
+  }
+
+  &_type_title {
+    width: 22%;
+  }
+
+  &_type_description {
+    width: 28%;
+  }
+
+  &_type_date-complete {
+    width: 18%;
+  }
+
+  &_type_files {
+    width: 18%;
+  }
+}
+
+.list-item__control {
+  display: flex;
+  align-items: center;
+  width: 120px;
+}
+
+.list-item__btn {
+  width: 25px;
+  height: 25px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 15px;
+  background-color: inherit;
+  transition: .3s;
+  
+  &:hover {
+    opacity: .7;
+  }
+}
+
+.list-item__btn_type_completed {
+  background: url('../../images/icon-list-completed.svg') center center no-repeat;
+  background-size: contain;
+}
+
+.list-item__btn_type_completed-active {
+  background: url('../../images/icon-list-completed-active.svg') center center no-repeat;
+  background-size: contain;
+}
+
+.list-item__btn_type_edit {
+  background: url('../../images/icon-list-edit.svg') center center no-repeat;
+  background-size: contain;
+}
+
+.list-item__btn_type_delete {
+  background: url('../../images/icon-list-delete.svg') center center no-repeat;
+  background-size: contain;
+}
