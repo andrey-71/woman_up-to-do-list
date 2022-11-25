@@ -1,7 +1,7 @@
 import React from 'react';
 import './list-item.less';
 
-function ListItem( { index, item }) {
+function ListItem( { index, item } ) {
 
   return (
     <section className='list-item'>

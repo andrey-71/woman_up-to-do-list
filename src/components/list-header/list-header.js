@@ -4,7 +4,7 @@ import './list-header.less';
 function ListHeader() {
 
   return (
-    <section className='list-header'>
+    <section className='list-header list__list-header'>
       <ul className='list-header__info'>
         <li className='list-header__data-element list-header__data-element_type_index'>№</li>
         <li className='list-header__data-element list-header__data-element_type_title'>Название</li>

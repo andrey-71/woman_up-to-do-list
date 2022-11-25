@@ -1,0 +1,103 @@
+@import '../../less/mixins';
+
+.info-popup {
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, .7);
+  transition: .3s linear;
+
+  &_active {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.info-popup__container {
+  position: relative;
+  max-width: 800px;
+  width: 100%;
+  min-height: 400px;
+  padding: 40px 30px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.info-popup__title {
+  margin: 20px 0 40px;
+  text-align: center;
+  .text-style('AGAvalancheC', 28px, 400, 1.25, #000);
+}
+
+.info-popup__subtitle {
+  margin: 0 0 15px;
+  .text-style('AGAvalancheC', 22px, 700, 1.25, #000);
+}
+
+.info-popup__text {
+  margin: 0 0 30px;
+  .text-style('AGAvalancheC', 18px, 400, 1.25, #000);
+
+  &_type_date {
+    font-weight: 700;
+  }
+
+  &_type_file {
+    max-width: 140px;
+    width: 100%;
+    font-weight: 700;
+  }
+}
+
+.info-popup__date {
+  font-weight: 400;
+}
+
+.info-popup__file-container {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.info-popup__file-list {
+  width: calc(100% - 140px);
+  display: flex;
+  flex-direction: column;
+  margin: 3px 0 0 15px;
+}
+
+.info-popup__file {
+  width: 100%;
+  margin: 0;
+  .text-style('AGAvalancheC', 14px, 400, 1.25, #000);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+}
+
+.info-popup__close {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  border: none;
+  background: url('../../images/icon-popup-close.svg') center center no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  transition: .5s;
+
+  &:hover {
+    opacity: .7;
+  }
+}

@@ -8,22 +8,20 @@ function List() {
   return (
     <section className='list page__list'>
       <ListHeader />
-          <ListItem
-            index='1.'
-            item={{
-              title: 'Название',
-              description: 'Описание',
-              dateComplete: '31.12.2022',
-              files: '-',
-              completed: true
-            }}
-          />
-        )
+      <ListItem
+        index='1.'
+        item={{
+          title: 'Название',
+          description: 'Описание',
+          dateComplete: '31.12.2022',
+          files: '-',
+          completed: true
+        }}
+      />
 
-        <h2 className='list__description'>
-          Ваш список дел пока пуст. Добавьте первую запись.
-        </h2>
-      }
+      <h2 className='list__description'>
+        Ваш список дел пока пуст. Добавьте первую запись.
+      </h2>
 
     </section>
   );

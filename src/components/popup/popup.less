@@ -1,0 +1,125 @@
+@import '../../less/mixins';
+
+.popup {
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, .7);
+  transition: .3s linear;
+  
+  &_active {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.popup__container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 600px;
+  min-height: 400px;
+  padding: 40px 30px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 10px;
+}
+
+.popup__title {
+  margin: 20px 0 40px;
+  .text-style('AGAvalancheC', 28px, 400, 1.25, #000);
+}
+
+.popup__form {
+  width: 420px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup__input-container {
+  width: 100%;
+  margin-bottom: 20px;
+  .text-style('AGAvalancheC', 16px, 400, 1.25, #7a7a7a);
+}
+
+.popup__input {
+  box-sizing: border-box;
+  margin-top: 5px;
+  padding: 5px;
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: none;
+  background-color: inherit;
+  outline: 1px solid #cecece;
+  .text-style('AGAvalancheC', 16px, 400, 1.25, #000);
+  transition: .3s;
+  
+  &:hover, &:focus {
+    outline: 1px solid #7a7a7a;
+  }
+  
+  &::placeholder {
+    color: #cecece;
+  }
+
+  &_type_description {
+    height: 120px;
+    resize: none;
+  }
+}
+
+.popup__control {
+  margin: 30px 0;
+}
+
+.popup__btn {
+  padding: 0;
+  width: 120px;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  .text-style('AGAvalancheC', 14px, 400, 1.25, #000);
+  cursor: pointer;
+  background-color: #cecece;
+  transition: .5s;
+  
+  &:hover {
+    background-color: #7a7a7a;
+  }
+  
+  
+  &:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+
+.popup__close {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  padding: 0;
+  width: 25px;
+  height: 25px;
+  border: none;
+  background: url('../../images/icon-popup-close.svg') center center no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  transition: .5s;
+  
+  &:hover {
+    opacity: .7;
+  }
+}
