@@ -1,46 +1,134 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
 import Popup from '../popup/popup';
 import FileLoader from '../file-loader/file-loader';
 
-function EditListPopup() {
+function EditListPopup({ isOpen, onClose, editListItem, selectedListItem }) {
+  // Инпуты
+  const [isTitleInput, setIsTitleInput] = useState('');
+  const [isDescriptionInput, setIsDescriptionInput] = useState('');
+  const [isDateCompleteInput, setIsDateCompleteInput] = useState('');
+  // Загруженные файлы
+  const [isFiles, setIsFiles] = useState([]);
+  // Поле для перетаскивания файлов
+  const [isDrag, setIsDrag] = useState(false);
+
+// Обработчик изменения инпутов
+  function handleChangeInputTitle(evt) {
+    setIsTitleInput(evt.target.value);
+  }
+  function handleChangeInputDescription(evt) {
+    setIsDescriptionInput(evt.target.value);
+  }
+  function handleChangeInputDateComplete(evt) {
+    setIsDateCompleteInput(evt.target.value);
+  }
+  function handleChangeInputFiles(evt) {
+    setIsFiles([...evt.target.files]);
+  }
+
+  // Очистка инпута при закрытии попапа
+  useEffect(() => {
+    if (isOpen) {
+      setIsTitleInput(selectedListItem.title);
+      setIsDescriptionInput(selectedListItem.description);
+      setIsDateCompleteInput(selectedListItem.dateComplete);
+      setIsFiles(selectedListItem.files);
+    } else {
+      setIsTitleInput('');
+      setIsDescriptionInput('');
+      setIsDateCompleteInput('');
+      setIsFiles([]);
+    }
+  }, [isOpen]);
+
+  // Обработчик загрузки файлов (добавляемые перетаскиванием)
+  const dragFile = {
+    dropHandler(evt) {
+      evt.preventDefault();
+      console.log([...evt.dataTransfer.files]);
+      setIsFiles([...evt.dataTransfer.files]);
+      setIsDrag(false);
+    },
+    startHandler(evt) {
+      evt.preventDefault();
+      setIsDrag(true);
+    },
+    leaveHandler(evt) {
+      evt.preventDefault();
+      setIsDrag(false);
+    }
+  }
+
+  // Сабмит формы
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    // Список файлов (временное решение)
+    const listFileName = isFiles.map(file => {
+      return { name: file.name };
+    })
+    editListItem(selectedListItem.index, {
+      title: isTitleInput,
+      description: isDescriptionInput,
+      dateComplete: isDateCompleteInput,
+      files: listFileName
+    });
+    onClose.allPopupToBtnClick();
+  }
 
   return (
     <Popup
-      name='add-list'
+      name='edit-list'
       title='Изменение информации'
       submitButtonText='Сохранить'
+      isOpen={isOpen}
+      onSubmit={handleSubmit}
+      onClose={onClose}
     >
       <label className='popup__input-container'>
         Название
         <input
           className='popup__input'
-          name='add-list-input'
+          name='edit-list-input'
           type='text'
           placeholder='Введите название'
+          value={isTitleInput}
           maxLength='40'
+          onChange={handleChangeInputTitle}
         />
       </label>
       <label className='popup__input-container'>
         Описание
         <textarea
           className='popup__input popup__input_type_description'
-          name='add-list-description'
+          name='edit-list-description'
           placeholder='Опишите задачу'
+          value={isDescriptionInput}
           maxLength='200'
+          onChange={handleChangeInputDescription}
         ></textarea>
       </label>
       <label className='popup__input-container'>
         Дата выполнения
         <input
           className='popup__input'
-          name='add-list-date'
+          name='edit-list-date'
           type='date'
+          min={dayjs().format('YYYY-MM-DD')}
           placeholder='Укажите сроки выполнения'
+          value={isDateCompleteInput}
+          onChange={handleChangeInputDateComplete}
         />
       </label>
       <label className='popup__input-container'>
         Файлы
-        <FileLoader />
+        <FileLoader
+          name='edit-list'
+          isFiles={isFiles}
+          isDrag={isDrag}
+          onDrag={dragFile}
+          onAddFiles={handleChangeInputFiles}
+        />
       </label>
     </Popup>
 

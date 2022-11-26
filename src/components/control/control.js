@@ -1,11 +1,11 @@
 import React from 'react';
 import './control.less';
 
-function Control() {
+function Control({onClick}) {
 
   return (
     <section className='control page__control'>
-      <div className='control__add'>
+      <div className='control__add'  onClick={onClick}>
         <button className='control__add-btn'>
           <span className='control__add-icon'></span>
         </button>

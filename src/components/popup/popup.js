@@ -1,15 +1,19 @@
 import React from 'react';
 import './popup.less';
 
-function Popup({ title, submitButtonText, children }) {
+function Popup({ name, title, submitButtonText, isOpen, onSubmit, onClose, children }) {
 
   return (
-    <div className='popup'>
+    <div
+      className={`popup ${isOpen && 'popup_active'}`}
+      onMouseDown={onClose.overlayClick.bind(onClose)}
+    >
       <div className='popup__container'>
         <h2 className='popup__title'>{title}</h2>
         <form
           className='popup__form'
-          name='add-list-form'
+          name={`${name}-form`}
+          onSubmit={onSubmit}
         >
           {children}
           <div className='popup__control'>
@@ -22,12 +26,14 @@ function Popup({ title, submitButtonText, children }) {
               className='popup__btn'
               type='button'
               value='Отмена'
+              onClick={onClose.allPopupToBtnClick}
             />
           </div>
         </form>
         <button
           className='popup__close'
           type='button'
+          onClick={onClose.allPopupToBtnClick}
         />
       </div>
     </div>
