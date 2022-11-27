@@ -10,6 +10,7 @@ function Popup({ name, title, submitButtonText, isOpen, onSubmit, onClose, child
     >
       <div className='popup__container'>
         <h2 className='popup__title'>{title}</h2>
+        <p className='popup__subtitle'>* - обязательные поля</p>
         <form
           className='popup__form'
           name={`${name}-form`}

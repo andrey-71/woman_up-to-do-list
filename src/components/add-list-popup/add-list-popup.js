@@ -35,6 +35,7 @@ function AddListPopup({isOpen, onClose, addListItem}) {
   }
   function handleChangeInputFiles(evt) {
     setIsFiles([...evt.target.files]);
+    console.log(evt.target.files);
   }
 
   // Обработчик загрузки файлов (добавляемые перетаскиванием)
@@ -53,20 +54,21 @@ function AddListPopup({isOpen, onClose, addListItem}) {
       setIsDrag(false);
     }
   }
-
+  console.log(isFiles);
   // Сабмит формы
   function handleSubmit(evt) {
     evt.preventDefault();
-    // Список файлов (временное решение)
+    // Список файлов
     const listFileName = isFiles.map(file => {
       return { name: file.name };
-    })
+    });
+
     addListItem(
       {
         title: isTitleInput,
         description: isDescriptionInput,
         dateComplete: isDateCompleteInput,
-        files: listFileName
+        files: listFileName.length > 0 ? listFileName : '',
       }
     );
     onClose.allPopupToBtnClick();
@@ -82,13 +84,14 @@ function AddListPopup({isOpen, onClose, addListItem}) {
       onClose={onClose}
     >
       <label className='popup__input-container'>
-        Название
+        Название*
         <input
           className='popup__input'
           name='add-list-input'
           type='text'
           placeholder='Введите название'
           value={isTitleInput}
+          required
           maxLength='40'
           onChange={handleChangeInputTitle}
         />
@@ -105,13 +108,14 @@ function AddListPopup({isOpen, onClose, addListItem}) {
         ></textarea>
       </label>
       <label className='popup__input-container'>
-        Дата выполнения
+        Дата выполнения*
         <input
           className='popup__input'
           name='add-list-date'
           type='date'
           min={dayjs().format('YYYY-MM-DD')}
           placeholder='Укажите сроки выполнения'
+          required
           value={isDateCompleteInput}
           onChange={handleChangeInputDateComplete}
         />

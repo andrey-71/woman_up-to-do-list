@@ -3,7 +3,8 @@ import './info-popup.less';
 import dayjs from 'dayjs';
 
 function InfoPopup({ isOpen, onClose, selectedListItem }) {
-  console.log(selectedListItem);
+
+
   return (
     <div className={`info-popup ${isOpen && 'info-popup_active'}`}
          onMouseDown={onClose.overlayClick.bind(onClose)}

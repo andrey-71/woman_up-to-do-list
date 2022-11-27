@@ -3,19 +3,19 @@ import './list.less';
 import ListHeader from '../list-header/list-header';
 import ListItem from '../list-item/list-item';
 
-function List({ isDataToDoList, toggleMarkExecute, removeItem, openEditPopup, openInfoPopup }) {
+function List({ isToDoList, toggleMarkExecute, removeListItem, openEditPopup, openInfoPopup }) {
 
   return (
     <section className='list page__list'>
       <ListHeader />
-      {isDataToDoList.length > 0 ?
-        isDataToDoList.map( (listItem, index) =>
+      {isToDoList.length > 0 ?
+        isToDoList.map( (listItem, index) =>
           <ListItem
             index={index}
             item={listItem}
             key={index}
             toggleMarkExecute={toggleMarkExecute}
-            removeItem={removeItem}
+            removeListItem={removeListItem}
             openEditPopup={openEditPopup}
             openInfoPopup={openInfoPopup}
           />

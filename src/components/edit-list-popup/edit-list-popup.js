@@ -4,6 +4,7 @@ import Popup from '../popup/popup';
 import FileLoader from '../file-loader/file-loader';
 
 function EditListPopup({ isOpen, onClose, editListItem, selectedListItem }) {
+
   // Инпуты
   const [isTitleInput, setIsTitleInput] = useState('');
   const [isDescriptionInput, setIsDescriptionInput] = useState('');
@@ -25,6 +26,7 @@ function EditListPopup({ isOpen, onClose, editListItem, selectedListItem }) {
   }
   function handleChangeInputFiles(evt) {
     setIsFiles([...evt.target.files]);
+    console.log(evt.target.files);
   }
 
   // Очистка инпута при закрытии попапа
@@ -46,7 +48,6 @@ function EditListPopup({ isOpen, onClose, editListItem, selectedListItem }) {
   const dragFile = {
     dropHandler(evt) {
       evt.preventDefault();
-      console.log([...evt.dataTransfer.files]);
       setIsFiles([...evt.dataTransfer.files]);
       setIsDrag(false);
     },
@@ -59,19 +60,22 @@ function EditListPopup({ isOpen, onClose, editListItem, selectedListItem }) {
       setIsDrag(false);
     }
   }
-
+  console.log(isFiles);
   // Сабмит формы
   function handleSubmit(evt) {
     evt.preventDefault();
-    // Список файлов (временное решение)
-    const listFileName = isFiles.map(file => {
+    // Список файлов
+    const listFileName = isFiles?.map(file => {
       return { name: file.name };
     })
-    editListItem(selectedListItem.index, {
+
+    editListItem({
+      id: selectedListItem.id,
+      completed: selectedListItem.completed,
       title: isTitleInput,
       description: isDescriptionInput,
       dateComplete: isDateCompleteInput,
-      files: listFileName
+      files: listFileName.length > 0 ? listFileName : ''
     });
     onClose.allPopupToBtnClick();
   }
@@ -86,13 +90,14 @@ function EditListPopup({ isOpen, onClose, editListItem, selectedListItem }) {
       onClose={onClose}
     >
       <label className='popup__input-container'>
-        Название
+        Название*
         <input
           className='popup__input'
           name='edit-list-input'
           type='text'
           placeholder='Введите название'
           value={isTitleInput}
+          required
           maxLength='40'
           onChange={handleChangeInputTitle}
         />
@@ -109,18 +114,19 @@ function EditListPopup({ isOpen, onClose, editListItem, selectedListItem }) {
         ></textarea>
       </label>
       <label className='popup__input-container'>
-        Дата выполнения
+        Дата выполнения*
         <input
           className='popup__input'
           name='edit-list-date'
           type='date'
+          required
           min={dayjs().format('YYYY-MM-DD')}
           placeholder='Укажите сроки выполнения'
           value={isDateCompleteInput}
           onChange={handleChangeInputDateComplete}
         />
       </label>
-      <label className='popup__input-container'>
+      <label className='popup__input-container' htmlFor='input_file'>
         Файлы
         <FileLoader
           name='edit-list'

@@ -2,7 +2,14 @@ import React from 'react';
 import './list-item.less';
 import dayjs from 'dayjs';
 
-function ListItem( { index, item, toggleMarkExecute, removeItem, openEditPopup, openInfoPopup }) {
+function ListItem( { index, item, toggleMarkExecute, removeListItem, openEditPopup, openInfoPopup }) {
+
+  const currentDate = dayjs().format('DD.MM.YYYY');
+  const dateComplete = item.dateComplete ? dayjs(item.dateComplete, 'YYYY-MM-DD').format('DD.MM.YYYY') : '-';
+  const dateClassName = currentDate <= dateComplete ?
+    'list-item__data-element list-item__data-element_type_date-complete'
+    :
+    'list-item__data-element list-item__data-element_type_date-complete list-item__data-element_type_date-complete-extended';
 
   return (
     <section className='list-item'>
@@ -16,10 +23,10 @@ function ListItem( { index, item, toggleMarkExecute, removeItem, openEditPopup, 
         <li className='list-item__data-element list-item__data-element_type_description'>
           {item.description ? item.description : '-'}
         </li>
-        <li className='list-item__data-element list-item__data-element_type_date-complete'>
+        <li className={dateClassName}>
           {item.dateComplete ? dayjs(item.dateComplete, 'YYYY-MM-DD').format('DD.MM.YYYY') : '-'}
         </li>
-        {item.files.length > 0 ?
+        {item?.files?.length > 0 ?
           <li className='list-item__data-element list-item__data-element_type_files'>
             <span className='list-item__file'>{item.files[0].name}</span>
             {item.files.length > 1 &&
@@ -36,17 +43,17 @@ function ListItem( { index, item, toggleMarkExecute, removeItem, openEditPopup, 
           className={`list-item__btn list-item__btn_type_completed ${item.completed &&
           'list-item__btn_type_completed-active'}`}
           title='Отметить как выполненный'
-          onClick={() => toggleMarkExecute(index)}
+          onClick={() => toggleMarkExecute(item.id, !item.completed)}
         ></button>
         <button
           className='list-item__btn list-item__btn_type_edit'
           title='Редактировать'
-          onClick={() => openEditPopup(index, item)}
+          onClick={() => openEditPopup(item)}
         ></button>
         <button
           className='list-item__btn list-item__btn_type_delete'
           title='Удалить'
-          onClick={() => removeItem(index)}
+          onClick={() => removeListItem(item.id)}
         ></button>
       </div>
 

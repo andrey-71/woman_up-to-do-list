@@ -12,10 +12,14 @@ function FileLoader({ name, isFiles, isDrag, onDrag, onAddFiles }) {
         onDragOver={evt => onDrag.startHandler(evt)}
         onDrop={evt => onDrag.dropHandler(evt)}
       >
-        <div className='file-loader__drag-icon'></div>
-        <p className='file-loader__drag-text'>Перетащите файлы в эту область</p>
+        <div className='file-loader__add-file-icon'></div>
+        <p className='file-loader__drag-text'>Нажмите для добавления файлов</p>
+        <p className='file-loader__drag-text'>Или перетащите файлы в эту область</p>
       </div>
       <div className='file-loader__load-files'>
+        {isFiles?.map((file, index) =>
+          <p key={index} className='file-loader__file-name' title={file.name}>{file.name}</p>
+        )}
         <input
           className='file-loader__input'
           name={`${name}-file`}
@@ -23,12 +27,7 @@ function FileLoader({ name, isFiles, isDrag, onDrag, onAddFiles }) {
           onChange={evt => onAddFiles(evt)}
           multiple
         />
-        <label className='file-loader__btn' htmlFor='input_file'>
-          Загрузить файлы
-        </label>
-        {isFiles.map((file, index) =>
-          <p key={index} className='file-loader__file-name' title={file.name}>{file.name}</p>
-        )}
+
       </div>
 
     </div>

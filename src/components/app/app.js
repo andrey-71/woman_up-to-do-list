@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './app.less';
+import {initializeApp} from 'firebase/app';
+import {getDatabase, ref, child, onValue, push, set, update, remove} from 'firebase/database';
 import Header from '../header/header';
 import List from '../list/list';
 import Control from '../control/control';
@@ -14,13 +16,20 @@ function App() {
   const [isEditListPopupOpen, setIsEditListPopupOpen] = useState(false);
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
   // Данные списка задач
-  const [isDataToDoList, setIsDataToDoList] = useState([]);
+  // const [isDataToDoList, setIsDataToDoList] = useState([]);
+  const [isToDoList, setIsToDoList] = useState([]);
   // Выбранный для редактирования элемент списка
   const [isSelectedListItem, setIsSelectedListItem] = useState({});
 
-  // Проверка наличия данных в localStorage и запись в стейт
+  // Initialize Firebase
+  const app = initializeApp({
+    databaseURL: "https://todo-list-api-17ea1-default-rtdb.europe-west1.firebasedatabase.app/"
+  });
+  const db = getDatabase();
+
+  // Загрузка данных
   useEffect(() => {
-    list.getData();
+    handleGetToDoList();
   }, []);
 
   // Обработчик нажатия Esc
@@ -34,55 +43,59 @@ function App() {
     }
   }, [isAddListPopupOpen, isEditListPopupOpen]);
 
-  // Управление списком дел
-  const list = {
-    toDoList: JSON.parse(localStorage.getItem('toDoList')),
-    // - получение данных
-    getData() {
-      this.toDoList?.length > 0 && setIsDataToDoList(this.toDoList);
-    },
-    // - добавление нового элемента
-    addItem(newListItem) {
-      if (this.toDoList) {
-        this.toDoList.push(
-          {
-            title: newListItem.title,
-            description: newListItem.description,
-            dateComplete: newListItem.dateComplete,
-            files: newListItem.files,
-            completed: false
-          }
-        );
-        localStorage.setItem('toDoList', JSON.stringify(this.toDoList));
-        setIsDataToDoList(this.toDoList);
-      } else {
-        localStorage.setItem('toDoList', JSON.stringify([{text: newListItem, completed: false}]));
-        setIsDataToDoList([{text: newListItem, completed: false}]);
-      }
-    },
-    // - поставить/снять отметку о выполнении
-    toggleMarkExecute(index) {
-      const completedListItem = this.toDoList.find((item, itemIndex) => itemIndex === index);
-      completedListItem.completed = !completedListItem.completed;
-      localStorage.setItem('toDoList', JSON.stringify(this.toDoList));
-      setIsDataToDoList(this.toDoList);
-    },
-    // - удаление элемента списка
-    removeItem(index) {
-      this.toDoList.splice(index, 1);
-      localStorage.setItem('toDoList', JSON.stringify(this.toDoList));
-      setIsDataToDoList(this.toDoList);
-    },
-    // - редактировать элемент списка
-    editItem(index, newItemData) {
-      const editedListItem = this.toDoList.find((item, itemIndex) => itemIndex === index);
-      editedListItem.title = newItemData.title;
-      editedListItem.description = newItemData.description;
-      editedListItem.dateComplete = newItemData.dateComplete;
-      editedListItem.files = newItemData.files;
-      localStorage.setItem('toDoList', JSON.stringify(this.toDoList));
-      setIsDataToDoList(this.toDoList);
-    },
+  // Получение данных
+  function handleGetToDoList() {
+
+    onValue(ref(db, 'to-do-list/'), (snapshot) => {
+      const toDoList = [];
+      snapshot.forEach((childSnapshot) => {
+        toDoList.push({
+          id: childSnapshot.key,
+          files: childSnapshot.val().files === '' ? [] : childSnapshot.val().files,
+          title: childSnapshot.val().title,
+          description: childSnapshot.val().description,
+          dateComplete: childSnapshot.val().dateComplete,
+          completed: childSnapshot.val().completed
+        });
+      })
+      setIsToDoList(toDoList);
+    })
+  }
+
+  // Запись данных
+  function handleAddListItem(newListItem) {
+    const newListItemRef = push(ref(db, 'to-do-list/'));
+
+    set(newListItemRef, {
+      id: newListItemRef.key,
+      title: newListItem.title,
+      description: newListItem.description,
+      dateComplete: newListItem.dateComplete,
+      files: newListItem.files,
+      completed: false,
+    })
+  }
+
+  // Обновление данных
+  function handleUpdateListItem(updateListItem) {
+    const updates = {};
+    updates[`/to-do-list/${updateListItem.id}`] = updateListItem;
+    return update(ref(db), updates);
+  }
+
+  // Отметка о выполнении
+  function handleToggleMarkCompleted(id, state) {
+    const updates = {};
+    updates[`to-do-list/${id}/completed`] = state;
+    return update(ref(db), updates);
+  }
+
+  // Удаление данных
+  function handleRemoveListItem(id) {
+    const removeListItemRef = ref(db, `to-do-list/${id}`);
+    remove(removeListItemRef)
+      .then(() => console.log('Успешно удалено'))
+      .catch(err => console.log(err))
   }
 
   // Открытие попапа
@@ -90,9 +103,9 @@ function App() {
     addList() {
       setIsAddListPopupOpen(true);
     },
-    editList(indexSelectedItem, selectedItem) {
+    editList(selectedItem) {
       setIsEditListPopupOpen(true);
-      setIsSelectedListItem({index: indexSelectedItem, ...selectedItem});
+      setIsSelectedListItem(selectedItem);
     },
     info(selectedItem) {
       setIsInfoPopupOpen(true);
@@ -123,9 +136,9 @@ function App() {
       <main>
         <Control onClick={openPopup.addList}/>
         <List
-          isDataToDoList={isDataToDoList}
-          toggleMarkExecute={list.toggleMarkExecute.bind(list)}
-          removeItem={list.removeItem.bind(list)}
+          isToDoList={isToDoList}
+          toggleMarkExecute={handleToggleMarkCompleted}
+          removeListItem={handleRemoveListItem}
           openEditPopup={openPopup.editList}
           openInfoPopup={openPopup.info}
         />
@@ -133,12 +146,12 @@ function App() {
       <AddListPopup
         isOpen={isAddListPopupOpen}
         onClose={closePopup}
-        addListItem={list.addItem.bind(list)}
+        addListItem={handleAddListItem}
       />
       <EditListPopup
         isOpen={isEditListPopupOpen}
         onClose={closePopup}
-        editListItem={list.editItem.bind(list)}
+        editListItem={handleUpdateListItem}
         selectedListItem={isSelectedListItem}
       />
       <InfoPopup
