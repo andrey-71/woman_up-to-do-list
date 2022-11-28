@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 
 function ListItem( { index, item, toggleMarkExecute, removeListItem, openEditPopup, openInfoPopup }) {
 
-  const currentDate = dayjs().format('DD.MM.YYYY');
-  const dateComplete = item.dateComplete ? dayjs(item.dateComplete, 'YYYY-MM-DD').format('DD.MM.YYYY') : '-';
+  const currentDate = dayjs().unix();
+  const dateComplete = dayjs(item.dateComplete, 'YYYY-MM-DD').unix();
   const dateClassName = currentDate <= dateComplete ?
     'list-item__data-element list-item__data-element_type_date-complete'
     :

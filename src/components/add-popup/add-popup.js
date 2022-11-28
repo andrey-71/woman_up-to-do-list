@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
 import Popup from '../popup/popup';
-import FileLoader from '../file-loader/file-loader';
 
-function AddListPopup({isOpen, onClose, addListItem}) {
+function AddPopup({isOpen, onClose, addListItem}) {
   // Инпуты
   const [isTitleInput, setIsTitleInput] = useState('');
   const [isDescriptionInput, setIsDescriptionInput] = useState('');
@@ -54,7 +52,7 @@ function AddListPopup({isOpen, onClose, addListItem}) {
       setIsDrag(false);
     }
   }
-  console.log(isFiles);
+
   // Сабмит формы
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -75,65 +73,26 @@ function AddListPopup({isOpen, onClose, addListItem}) {
   }
 
   return (
-    <Popup
-      name='add-list'
-      title='Новая задача'
-      submitButtonText='Добавить'
-      isOpen={isOpen}
-      onSubmit={handleSubmit}
-      onClose={onClose}
-    >
-      <label className='popup__input-container'>
-        Название*
-        <input
-          className='popup__input'
-          name='add-list-input'
-          type='text'
-          placeholder='Введите название'
-          value={isTitleInput}
-          required
-          maxLength='40'
-          onChange={handleChangeInputTitle}
-        />
-      </label>
-      <label className='popup__input-container'>
-        Описание
-        <textarea
-          className='popup__input popup__input_type_description'
-          name='add-list-description'
-          placeholder='Опишите задачу'
-          value={isDescriptionInput}
-          maxLength='200'
-          onChange={handleChangeInputDescription}
-        ></textarea>
-      </label>
-      <label className='popup__input-container'>
-        Дата выполнения*
-        <input
-          className='popup__input'
-          name='add-list-date'
-          type='date'
-          min={dayjs().format('YYYY-MM-DD')}
-          placeholder='Укажите сроки выполнения'
-          required
-          value={isDateCompleteInput}
-          onChange={handleChangeInputDateComplete}
-        />
-      </label>
-      <label className='popup__input-container'>
-        Файлы
-        <FileLoader
-          name='add-list'
-          isFiles={isFiles}
-          isDrag={isDrag}
-          onDrag={dragFile}
-          onAddFiles={handleChangeInputFiles}
-        />
-      </label>
-
-    </Popup>
-
+    isOpen &&
+      <Popup
+        name='add-popup'
+        title='Новая задача'
+        submitButtonText='Добавить'
+        isTitleInput={isTitleInput}
+        isDescriptionInput={isDescriptionInput}
+        isDateCompleteInput={isDateCompleteInput}
+        isFiles={isFiles}
+        isDrag={isDrag}
+        handleChangeInputTitle={handleChangeInputTitle}
+        handleChangeInputDescription={handleChangeInputDescription}
+        handleChangeInputDateComplete={handleChangeInputDateComplete}
+        handleChangeInputFiles={handleChangeInputFiles}
+        dragFile={dragFile}
+        isOpen={isOpen}
+        onSubmit={handleSubmit}
+        onClose={onClose}
+      ></Popup>
   );
 }
 
-export default React.memo(AddListPopup);
+export default React.memo(AddPopup);

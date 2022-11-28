@@ -1,22 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import './app.less';
 import {initializeApp} from 'firebase/app';
-import {getDatabase, ref, child, onValue, push, set, update, remove} from 'firebase/database';
+import {getDatabase, ref, onValue, push, set, update, remove} from 'firebase/database';
 import Header from '../header/header';
 import List from '../list/list';
 import Control from '../control/control';
-import AddListPopup from '../add-list-popup/add-list-popup';
-import EditListPopup from '../edit-list-popup/edit-list-popup';
+import AddPopup from '../add-popup/add-popup';
+import EditPopup from '../edit-popup/edit-popup';
 import InfoPopup from '../info-popup/info-popup';
 
 function App() {
 
   // Попапы
-  const [isAddListPopupOpen, setIsAddListPopupOpen] = useState(false);
-  const [isEditListPopupOpen, setIsEditListPopupOpen] = useState(false);
+  const [isAddPopupOpen, setIsAddPopupOpen] = useState(false);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
   // Данные списка задач
-  // const [isDataToDoList, setIsDataToDoList] = useState([]);
   const [isToDoList, setIsToDoList] = useState([]);
   // Выбранный для редактирования элемент списка
   const [isSelectedListItem, setIsSelectedListItem] = useState({});
@@ -34,14 +33,14 @@ function App() {
 
   // Обработчик нажатия Esc
   useEffect(() => {
-    if (isAddListPopupOpen || isEditListPopupOpen) {
+    if (isAddPopupOpen || isEditPopupOpen) {
       document.addEventListener('keyup', closePopup.escClick.bind(closePopup));
 
       return () => {
         document.removeEventListener('keyup', closePopup.escClick.bind(closePopup));
       }
     }
-  }, [isAddListPopupOpen, isEditListPopupOpen]);
+  }, [isAddPopupOpen, isEditPopupOpen]);
 
   // Получение данных
   function handleGetToDoList() {
@@ -101,10 +100,10 @@ function App() {
   // Открытие попапа
   const openPopup = {
     addList() {
-      setIsAddListPopupOpen(true);
+      setIsAddPopupOpen(true);
     },
     editList(selectedItem) {
-      setIsEditListPopupOpen(true);
+      setIsEditPopupOpen(true);
       setIsSelectedListItem(selectedItem);
     },
     info(selectedItem) {
@@ -116,8 +115,8 @@ function App() {
   // Закрытие попапа
   const closePopup = {
     allPopupToBtnClick() {
-      setIsAddListPopupOpen(false);
-      setIsEditListPopupOpen(false);
+      setIsAddPopupOpen(false);
+      setIsEditPopupOpen(false);
       setIsInfoPopupOpen(false)
       setIsSelectedListItem({});
     },
@@ -143,13 +142,13 @@ function App() {
           openInfoPopup={openPopup.info}
         />
       </main>
-      <AddListPopup
-        isOpen={isAddListPopupOpen}
+      <AddPopup
+        isOpen={isAddPopupOpen}
         onClose={closePopup}
         addListItem={handleAddListItem}
       />
-      <EditListPopup
-        isOpen={isEditListPopupOpen}
+      <EditPopup
+        isOpen={isEditPopupOpen}
         onClose={closePopup}
         editListItem={handleUpdateListItem}
         selectedListItem={isSelectedListItem}
