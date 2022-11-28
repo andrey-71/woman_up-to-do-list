@@ -12,22 +12,7 @@ function EditPopup({ isOpen, onClose, editListItem, selectedListItem }) {
   // Поле для перетаскивания файлов
   const [isDrag, setIsDrag] = useState(false);
 
-// Обработчик изменения инпутов
-  function handleChangeInputTitle(evt) {
-    setIsTitleInput(evt.target.value);
-  }
-  function handleChangeInputDescription(evt) {
-    setIsDescriptionInput(evt.target.value);
-  }
-  function handleChangeInputDateComplete(evt) {
-    setIsDateCompleteInput(evt.target.value);
-  }
-  function handleChangeInputFiles(evt) {
-    setIsFiles([...evt.target.files]);
-    console.log(evt.target.files);
-  }
-
-  // Очистка инпута при закрытии попапа
+  /** Запись/очистка инпутов при открытии/закрытии попапа */
   useEffect(() => {
     if (isOpen) {
       setIsTitleInput(selectedListItem.title);
@@ -42,24 +27,59 @@ function EditPopup({ isOpen, onClose, editListItem, selectedListItem }) {
     }
   }, [isOpen]);
 
-  // Обработчик загрузки файлов (добавляемые перетаскиванием)
+  /**
+   * Обработчики изменения инпутов
+   * @param {Object} evt - объект события инпута.
+   * @param {string} evt.target.value - значение из инпута.
+   * @param {Object[]} evt.target.files - список прикрепленных файлов.
+   */
+  function handleChangeInputTitle(evt) {
+    setIsTitleInput(evt.target.value);
+  }
+  function handleChangeInputDescription(evt) {
+    setIsDescriptionInput(evt.target.value);
+  }
+  function handleChangeInputDateComplete(evt) {
+    setIsDateCompleteInput(evt.target.value);
+  }
+  function handleChangeInputFiles(evt) {
+    setIsFiles([...evt.target.files]);
+  }
+
+  /** Загрузка файлов */
   const dragFile = {
+    /**
+     * Обработчик загрузки файлов (добавляемые перетаскиванием)
+     * @param {Object} evt - объект события перетаскивания.
+     * @param {Object[]} evt.dataTransfer.files - список прикрепленных файлов.
+     */
     dropHandler(evt) {
       evt.preventDefault();
       setIsFiles([...evt.dataTransfer.files]);
       setIsDrag(false);
     },
+    /**
+     * Обработчик загрузки файлов при перетаскивании в область
+     * @param {Object} evt - объект события перетаскивания.
+     */
     startHandler(evt) {
       evt.preventDefault();
       setIsDrag(true);
     },
+    /**
+     * Обработчик загрузки файлов при уходе из области перетаскивания
+     * @param {Object} evt - объект события перетаскивания.
+     */
     leaveHandler(evt) {
       evt.preventDefault();
       setIsDrag(false);
     }
   }
 
-  // Сабмит формы
+  /**
+   * Сабмит формы и закрытие попапа
+   * @param {Object} evt - объект события перетаскивания.
+   */
   function handleSubmit(evt) {
     evt.preventDefault();
     // Список файлов
